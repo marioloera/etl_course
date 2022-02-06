@@ -39,7 +39,7 @@ The command below extracts multiple fields 1st, 3rd, and 6th
 cut -d":" -f1,3,6 /etc/passwd
 
 : '
-The command below extracts a range of fields 3rd to 6th 
+The command below extracts a range of fields 3rd to 6th
 (userid, groupid, user description and home directory) from /etc/passwd.
 '
 cut -d":" -f3-6 /etc/passwd
