@@ -6,3 +6,18 @@ Ensure the environment variable PROJECT_ID points to a GCP project and install a
 $ export PROJECT_ID=trustly-data-services-test
 $ make install-dev
 ```
+
+# commands
+```
+airflow webserver
+```
+in another terminal
+```
+airflow scheduler
+```
+you may need to do when removing dags:
+```
+airflow db reset
+```
+# DEVELOP and RUN DAGS
+add folder to the dag folders and re run the scheduler
