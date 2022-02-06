@@ -1,4 +1,5 @@
-DAGS := airflow_trustly/dags
+# DAGS := airflow_trustly/dags
+DAGS := dags
 PWD := $(shell pwd)
 TODAY := $(shell date -u +%Y%m%d)
 # https://blog.emacsos.com/bootstrap-a-python-project.html
@@ -48,14 +49,15 @@ test:
 coverage: test
 	coverage report -m
 
-install: add-symlinks
+# install: add-symlinks
+install:
 	# Pin dependencies according to https://airflow.apache.org/docs/stable/installation.html#getting-airflow
 	pip install -r requirements_local.txt --use-deprecated=legacy-resolver \
 --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-1.10.15/constraints-3.7.txt"
 	rm -rf $(AIRFLOW_HOME)
 	airflow initdb
 	ln -sfF $(PWD)/$(DAGS) $(AIRFLOW_HOME)/dags
-	python3 airflow_trustly/setup_connections.py
+	# python3 airflow_trustly/setup_connections.py
 
 install-dev: install
 	pip install -r requirements_dev.txt
