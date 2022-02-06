@@ -1,7 +1,7 @@
 # This script
 # Extracts data from /etc/passwd file into a CSV file.
 
-# The csv data file contains the user name, user id and
+# The csv data file contains the user name, user id and 
 # home directory of each user account defined in /etc/passwd
 
 # Transforms the text delimiter from ":" to ",".
@@ -15,7 +15,7 @@ gunzip -f web-server-access-log.txt.gz
 
 echo "Extracting data"
 
-# Extract the columns 1 (user name), 2 (user id) and
+# Extract the columns 1 (user name), 2 (user id) and 
 # 6 (home directory path) from /etc/passwd
 
 # cut -d":" -f1,3,6 /etc/passwd

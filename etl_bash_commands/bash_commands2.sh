@@ -5,7 +5,7 @@ tr is a filter command used to translate, squeeze, and/or delete characters.
 2.1. Translate from one character set to another
 The command below translates all lower case alphabets to upper case.
 '
-echo "Shell Scripting" | tr "[a-z]" "[A-Z]"
+echo "Shell Scripting" | tr "[a-z]" "[A-Z]" 
 
 : '
 You could also use the pre-defined character sets also for this purpose:
