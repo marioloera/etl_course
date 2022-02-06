@@ -33,7 +33,7 @@ dag = DAG(
     default_args=default_args,
     description="My first DAG",
     schedule_interval=timedelta(days=1),
-    is_paused_upon_creation=False,
+    is_paused_upon_creation=True,
 )
 
 # define the tasks
