@@ -39,7 +39,7 @@ dag = DAG(
     default_args=default_args,
     description="ETL_Server_Access_Log_Processing",
     schedule_interval=timedelta(days=1),
-    is_paused_upon_creation=False,
+    is_paused_upon_creation=True,
 )
 
 # define the tasks
