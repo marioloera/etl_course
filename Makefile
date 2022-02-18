@@ -18,15 +18,30 @@ test:
 coverage: test
 	coverage report -m
 
-# install: add-symlinks
-install:
-	# Pin dependencies according to https://airflow.apache.org/docs/stable/installation.html#getting-airflow
-	pip install -r requirements_local.txt --use-deprecated=legacy-resolver \
---constraint "https://raw.githubusercontent.com/apache/airflow/constraints-1.10.15/constraints-3.7.txt"
+clean-pyc:
+	find . -name '*.pyc' -exec rm -f {} +
+	find . -name '*.pyo' -exec rm -f {} +
+	find . -name '*~' -exec rm -f {} +
+	find . -d -name '__pycache__' -exec rmdir {} +
+
+clean-build:
+	rm -rf build/
+	rm -rf dist/
+	rm -rf *.egg-info
+
+clean: clean-pyc clean-build
+	rm -rf mainenv __pycache__
+
+install: clean
+	# Pin dependencies according to https://airflow.apache.org/docs/apache-airflow/stable/installation/installing-from-pypi.html#constraints-files
+	pip install -r requirements_local.txt --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.2.3/constraints-3.8.txt"
 	rm -rf $(AIRFLOW_HOME)
-	airflow initdb
+	airflow db init
 	ln -sfF $(PWD)/$(DAGS) $(AIRFLOW_HOME)/dags
 
 install-dev: install
 	pip install -r requirements_dev.txt
-	pre-commit install
+
+conf:
+	sed -i=.bak 's/load_examples = True/load_examples = False/g' $(AIRFLOW_HOME)/airflow.cfg
+	sed -i=.bak "s/# AUTH_ROLE_PUBLIC = 'Public'/AUTH_ROLE_PUBLIC = 'Admin'/g" $(AIRFLOW_HOME)/webserver_config.py
