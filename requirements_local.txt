@@ -1,2 +1,1 @@
-apache-airflow[gcp,kubernetes]==1.10.15
-# in course 2.2.0
+apache-airflow[gcp,kubernetes]==2.2.3
