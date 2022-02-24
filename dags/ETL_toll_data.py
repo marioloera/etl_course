@@ -31,7 +31,20 @@ unzip_data = BashOperator(
     bash_command=f"tar zxvf {SRC} -C {TARGET}",
     dag=dag,
 )
-
-unzip_data
-
 # airflow tasks test ETL_toll_data unzip_data 20220224
+
+# Task 1.4 - Create a task to extract data from csv file
+SRC = "/tmp/project/airflow/dags/finalassignment/staging/vehicle-data.csv"
+TARGET = "/tmp/project/airflow/dags/finalassignment/staging/csv_data.csv"
+extract_data_from_csv = BashOperator(
+    task_id="extract_data_from_csv",
+    bash_command=f'cut -d"," -f1-4 {SRC} > {TARGET}',
+    dag=dag,
+)
+
+# airflow tasks test ETL_toll_data extract_data_from_csv 20220224
+
+
+
+# pipeline
+unzip_data >> extract_data_from_csv
