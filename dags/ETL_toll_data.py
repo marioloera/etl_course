@@ -45,6 +45,17 @@ extract_data_from_csv = BashOperator(
 # airflow tasks test ETL_toll_data extract_data_from_csv 20220224
 
 
+# Task 1.5 - Create a task to extract data from tsv file
+SRC="/tmp/project/airflow/dags/finalassignment/staging/tollplaza-data.tsv"
+TARGET="/tmp/project/airflow/dags/finalassignment/staging/tsv_data.csv"
+extract_data_from_tsv = BashOperator(
+    task_id="extract_data_from_tsv",
+    bash_command=f"tr $'\t' ',' < {SRC} | cut -d',' -f5-7 > {TARGET}",
+    dag=dag,
+)
+
+# airflow tasks test ETL_toll_data extract_data_from_tsv 20220224
+
 
 # pipeline
-unzip_data >> extract_data_from_csv
+unzip_data >> extract_data_from_csv >> extract_data_from_tsv
