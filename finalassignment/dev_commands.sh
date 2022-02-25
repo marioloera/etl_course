@@ -48,3 +48,9 @@ C="./out/c.csv"
 # paste $A $B
 # paste -d "," $A $B $C
 # paste -d "," $A $B $C > ./out/a_b_c.csv
+
+
+# 
+EXTRACTED_DATA="/tmp/project/airflow/dags/finalassignment/staging/extracted_data.csv"
+TRANSFORMED_DATA="/tmp/project/airflow/dags/finalassignment/staging/transformed_data.csv"
+tr '[:lower:]' '[:upper:]' < $EXTRACTED_DATA > $TRANSFORMED_DATA

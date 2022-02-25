@@ -85,10 +85,46 @@ consolidate_data = BashOperator(
 
 # airflow tasks test ETL_toll_data consolidate_data 20220224
 
+# Task 1.8 - Transform and load the data
+EXTRACTED_DATA="/tmp/project/airflow/dags/finalassignment/staging/extracted_data.csv"
+TRANSFORMED_DATA="/tmp/project/airflow/dags/finalassignment/staging/transformed_data.csv"
+CMD = f"tr '[:lower:]' '[:upper:]' < {EXTRACTED_DATA} > {TRANSFORMED_DATA}"
+transform_data = BashOperator(
+    task_id="transform_data",
+    bash_command=CMD,
+    dag=dag,
+)
+
+# airflow tasks test ETL_toll_data transform_data 20220224
 
 # pipeline
-unzip_data >> [
-    extract_data_from_csv,
-    extract_data_from_tsv,
-    extract_data_from_fixed_width,
-] >> consolidate_data
+# unzip_data >> [
+#     extract_data_from_csv,
+#     extract_data_from_tsv,
+#     extract_data_from_fixed_width,
+# ] >> consolidate_data >> transform_data
+
+
+
+# Task 1.9 - Define the task pipeline
+(
+    unzip_data >>
+    extract_data_from_csv >>
+    extract_data_from_tsv >>
+    extract_data_from_fixed_width >>
+    consolidate_data >>
+    transform_data
+)
+
+
+# Task 1.10 - Submit the DAG submit_dag.jpg
+"""
+cp ETL_toll_data.py /tmp/project/airflow/dags/
+"""
+
+# Task 1.11 - Unpause the DAG unpause_dag.jpg
+"""
+airflow dags unpause ETL_toll_data
+"""
+
+# Task 1.12 - Monitor the DAG  dag_runs.jpg
