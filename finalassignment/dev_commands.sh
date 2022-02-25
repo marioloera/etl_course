@@ -31,6 +31,7 @@ CSV_DATA="/tmp/project/airflow/dags/finalassignment/staging/csv_data.csv"
 TSV_DATA="/tmp/project/airflow/dags/finalassignment/staging/tsv_data.csv"
 FIXED_WITH_DATA="/tmp/project/airflow/dags/finalassignment/staging/fixed_width_data.csv"
 EXTRACTED_DATA="/tmp/project/airflow/dags/finalassignment/staging/extracted_data.csv"
+paste -d ',' $CSV_DATA $TSV_DATA $FIXED_WITH_DATA  > $EXTRACTED_DATA
 
 
 # head $CSV_DATA > "./out/CSV_DATA.csv"
@@ -44,6 +45,6 @@ A="./out/a.csv"
 B="./out/b.csv"
 C="./out/c.csv"
 
-paste $A $B
-paste -d "," $A $B $C
-paste -d "," $A $B $C > ./out/a_b_c.csv
+# paste $A $B
+# paste -d "," $A $B $C
+# paste -d "," $A $B $C > ./out/a_b_c.csv

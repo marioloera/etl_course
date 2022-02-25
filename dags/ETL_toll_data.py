@@ -71,12 +71,19 @@ extract_data_from_fixed_width = BashOperator(
 
 # airflow tasks test ETL_toll_data extract_data_from_fixed_width 20220224
 
-
-end_task = BashOperator(
-    task_id="end_task",
-    bash_command="echo end",
+# Task 1.7 - Create a task to consolidate data extracted from previous tasks
+CSV_DATA = "/tmp/project/airflow/dags/finalassignment/staging/csv_data.csv"
+TSV_DATA = "/tmp/project/airflow/dags/finalassignment/staging/tsv_data.csv"
+FIXED_WITH_DATA = "/tmp/project/airflow/dags/finalassignment/staging/fixed_width_data.csv"
+EXTRACTED_DATA = "/tmp/project/airflow/dags/finalassignment/staging/extracted_data.csv"
+CMD = f"paste -d ',' {CSV_DATA} {TSV_DATA} {FIXED_WITH_DATA}  > {EXTRACTED_DATA}"
+consolidate_data = BashOperator(
+    task_id="consolidate_data",
+    bash_command=CMD,
     dag=dag,
 )
+
+# airflow tasks test ETL_toll_data consolidate_data 20220224
 
 
 # pipeline
@@ -84,4 +91,4 @@ unzip_data >> [
     extract_data_from_csv,
     extract_data_from_tsv,
     extract_data_from_fixed_width,
-] >> end_task
+] >> consolidate_data
