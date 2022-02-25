@@ -40,5 +40,10 @@ CSV_DATA="./out/CSV_DATA.csv"
 TSV_DATA="./out/TSV_DATA.csv"
 FIXED_WITH_DATA="./out/FIXED_WITH_DATA.csv"
 
-paste -d ',' $CSV_DATA $TSV_DATA
-paste -d ',' $CSV_DATA $TSV_DATA > ./out/extracted_data.csv
+A="./out/a.csv"
+B="./out/b.csv"
+C="./out/c.csv"
+
+paste $A $B
+paste -d "," $A $B $C
+paste -d "," $A $B $C > ./out/a_b_c.csv
