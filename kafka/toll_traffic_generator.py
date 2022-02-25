@@ -6,7 +6,7 @@ from random import random, randint, choice
 from kafka import KafkaProducer
 producer = KafkaProducer(bootstrap_servers='localhost:9092')
 
-TOPIC = 'set your topic here'
+TOPIC = 'toll'
 
 VEHICLE_TYPES = ("car", "car", "car", "car", "car", "car", "car", "car",
                  "car", "car", "car", "truck", "truck", "truck",
