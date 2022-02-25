@@ -21,6 +21,24 @@
 
 
 # Task 1.6 - Create a task to extract data from fixed width file
-SRC="/tmp/project/airflow/dags/finalassignment/staging/payment-data.txt"
-TARGET="/tmp/project/airflow/dags/finalassignment/staging/fixed_width_data.csv"
-cut -c 59-67 $SRC | tr ' ' ',' > $TARGET
+# SRC="/tmp/project/airflow/dags/finalassignment/staging/payment-data.txt"
+# TARGET="/tmp/project/airflow/dags/finalassignment/staging/fixed_width_data.csv"
+# cut -c 59-67 $SRC | tr ' ' ',' > $TARGET
+
+
+# Task 1.7 - Create a task to consolidate data extracted from previous tasks
+CSV_DATA="/tmp/project/airflow/dags/finalassignment/staging/csv_data.csv"
+TSV_DATA="/tmp/project/airflow/dags/finalassignment/staging/tsv_data.csv"
+FIXED_WITH_DATA="/tmp/project/airflow/dags/finalassignment/staging/fixed_width_data.csv"
+EXTRACTED_DATA="/tmp/project/airflow/dags/finalassignment/staging/extracted_data.csv"
+
+
+# head $CSV_DATA > "./out/CSV_DATA.csv"
+# head $TSV_DATA > "./out/TSV_DATA.csv"
+# head $FIXED_WITH_DATA > "./out/FIXED_WITH_DATA.csv"
+CSV_DATA="./out/CSV_DATA.csv"
+TSV_DATA="./out/TSV_DATA.csv"
+FIXED_WITH_DATA="./out/FIXED_WITH_DATA.csv"
+
+paste -d ',' $CSV_DATA $TSV_DATA
+paste -d ',' $CSV_DATA $TSV_DATA > ./out/extracted_data.csv
