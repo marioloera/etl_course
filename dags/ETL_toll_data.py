@@ -56,6 +56,18 @@ extract_data_from_tsv = BashOperator(
 
 # airflow tasks test ETL_toll_data extract_data_from_tsv 20220224
 
+# Task 1.6 - Create a task to extract data from fixed width file
+SRC = "/tmp/project/airflow/dags/finalassignment/staging/payment-data.txt"
+TARGET = "/tmp/project/airflow/dags/finalassignment/staging/fixed_width_data.csv"
+cmd = f"cut -c 59-67 {SRC} | tr ' ' ',' > {TARGET}"
+extract_data_from_fixed_width = BashOperator(
+    task_id="extract_data_from_fixed_width",
+    bash_command=cmd,
+    dag=dag,
+)
+
+# airflow tasks test ETL_toll_data extract_data_from_fixed_width 20220224
+
 
 # pipeline
-unzip_data >> extract_data_from_csv >> extract_data_from_tsv
+unzip_data >> extract_data_from_csv >> extract_data_from_tsv >> extract_data_from_fixed_width
