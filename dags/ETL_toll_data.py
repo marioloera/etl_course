@@ -126,6 +126,22 @@ transform_data = BashOperator(
 
 # airflow tasks test ETL_toll_data transform_data 20220224
 
+extract = [
+    extract_data_from_csv,
+    extract_data_from_tsv,
+    extract_data_from_fixed_width,
+]
+
+# pipeline
+(
+    make_dir >>
+    download_data >>
+    unzip_data >>
+    extract >>
+    consolidate_data >>
+    transform_data
+)
+
 # pipeline
 # unzip_data >> [
 #     extract_data_from_csv,
@@ -136,14 +152,14 @@ transform_data = BashOperator(
 
 
 # Task 1.9 - Define the task pipeline
-(
-    unzip_data >>
-    extract_data_from_csv >>
-    extract_data_from_tsv >>
-    extract_data_from_fixed_width >>
-    consolidate_data >>
-    transform_data
-)
+# (
+#     unzip_data >>
+#     extract_data_from_csv >>
+#     extract_data_from_tsv >>
+#     extract_data_from_fixed_width >>
+#     consolidate_data >>
+#     transform_data
+# )
 
 
 # Task 1.10 - Submit the DAG submit_dag.jpg
