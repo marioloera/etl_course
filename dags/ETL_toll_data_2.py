@@ -1,6 +1,7 @@
 from datetime import timedelta
 from airflow import DAG
 from airflow.operators.bash import BashOperator
+from airflow.sensors.filesystem import FileSensor
 from airflow.utils.dates import days_ago
 
 DIR = "/tmp/project/airflow/dags/finalassignment/staging/"
@@ -52,6 +53,18 @@ def get_task(task_id, with_dir=True):
         dag=dag,
     )
 
+def get_sensor(file_id):
+    return FileSensor(
+        task_id=f"exist_{file_id}",
+        poke_interval=5,
+        timeout=16, # fails if it doesnt
+        mode="reschedule",
+        # on_failure_callback=_failure_callback,
+        filepath=f"{DIR}{ENV_VAR[file_id]}",
+        #fs_conn_id=f'conn_filesensor_{partner}'
+        dag=dag,
+    )
+
 TASKS_CONFIG = {
     "mkdir": "mkdir -p $DIR",
     "wget": "wget $TOLL_DATA_URL -O $TOLL_DATA",
@@ -68,6 +81,7 @@ TASKS_CONFIG = {
     get_task("mkdir", with_dir=False) >>
     get_task("wget") >>
     get_task("unzip")  >> [
+        get_sensor("VEHICLE_DATA"),
         get_task("ext_vehicle_data"),
         get_task("ext_tollplaza_data"),
         get_task("ext_payment_data"),
