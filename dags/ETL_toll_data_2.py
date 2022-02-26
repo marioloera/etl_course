@@ -4,6 +4,7 @@ from airflow.operators.bash import BashOperator
 from airflow.sensors.filesystem import FileSensor
 from airflow.utils.dates import days_ago
 from airflow.models.baseoperator import chain
+from airflow.operators.dummy import DummyOperator
 
 DIR = "/tmp/project/airflow/dags/finalassignment/staging/"
 ENV_VAR = {
@@ -142,3 +143,24 @@ unzip >> get_sensor("PAYMENT_DATA") >> get_task("ext_payment_data") >> consolida
 consolidate >> get_task("transform")
 """
 
+"""
+# another option here but not exactly the desire dag
+# pipeline
+(
+    get_task("mkdir", with_dir=False) >>
+    get_task("wget") >>
+    get_sensor("TOLL_DATA") >>
+    get_task("unzip") >> [
+        get_sensor("VEHICLE_DATA"),
+        get_sensor("PAYMENT_DATA"),
+        get_sensor("TOLLPLAZA_DATA"),
+    ] >>
+    DummyOperator(task_id="join", dag=dag) >> [
+        get_task("ext_vehicle_data"),
+        get_task("ext_payment_data"),
+        get_task("ext_tollplaza_data"),
+    ] >>
+    get_task("consolidate") >>
+    get_task("transform")
+)
+"""
