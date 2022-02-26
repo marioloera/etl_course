@@ -16,3 +16,7 @@ wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DB02
 ```
 python3 -m pip install kafka
 ```
+
+```
+wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DB0250EN-SkillsNetwork/labs/Final%20Assignment/streaming_data_reader.py
+```
