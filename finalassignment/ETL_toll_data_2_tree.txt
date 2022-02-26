@@ -1,0 +1,16 @@
+<Task(BashOperator): mkdir>
+    <Task(BashOperator): wget>
+        <Task(FileSensor): exist_TOLL_DATA>
+            <Task(BashOperator): unzip>
+                <Task(FileSensor): exist_VEHICLE_DATA>
+                    <Task(BashOperator): ext_vehicle_data>
+                        <Task(BashOperator): consolidate>
+                            <Task(BashOperator): transform>
+                <Task(FileSensor): exist_TOLLPLAZA_DATA>
+                    <Task(BashOperator): ext_tollplaza_data>
+                        <Task(BashOperator): consolidate>
+                            <Task(BashOperator): transform>
+                <Task(FileSensor): exist_PAYMENT_DATA>
+                    <Task(BashOperator): ext_payment_data>
+                        <Task(BashOperator): consolidate>
+                            <Task(BashOperator): transform>
