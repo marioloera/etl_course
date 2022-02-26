@@ -56,9 +56,9 @@ TASKS_CONFIG = {
     "mkdir": "mkdir -p $DIR",
     "wget": "wget $TOLL_DATA_URL -O $TOLL_DATA",
     "unzip": "tar zxvf $TOLL_DATA -C $DIR",
-    "ext_csv": "cut -d',' -f1-4 $VEHICLE_DATA > $CSV_DATA",
-    "ext_fixed_with": "cut -c 59-67 $PAYMENT_DATA | tr ' ' ',' > $FIXED_WITH_DATA",
-    "ext_tsv": "cut -d$'\t' -f5-7 $TOLLPLAZA_DATA | tr $'\t' ',' | tr -d $'\r' > $TSV_DATA",
+    "ext_vehicle_data": "cut -d',' -f1-4 $VEHICLE_DATA > $CSV_DATA",
+    "ext_payment_data": "cut -c 59-67 $PAYMENT_DATA | tr ' ' ',' > $FIXED_WITH_DATA",
+    "ext_tollplaza_data": "cut -d$'\t' -f5-7 $TOLLPLAZA_DATA | tr $'\t' ',' | tr -d $'\r' > $TSV_DATA",
     "consolidate": "paste -d ',' $CSV_DATA $TSV_DATA $FIXED_WITH_DATA > $EXTRACTED_DATA",
     "transform": "tr '[:lower:]' '[:upper:]' < $EXTRACTED_DATA > $TRANSFORMED_DATA",
 }
@@ -68,9 +68,9 @@ TASKS_CONFIG = {
     get_task("mkdir", with_dir=False) >>
     get_task("wget") >>
     get_task("unzip")  >> [
-        get_task("ext_csv"), 
-        get_task("ext_fixed_with"),
-        get_task("ext_tsv"),
+        get_task("ext_vehicle_data"),
+        get_task("ext_tollplaza_data"),
+        get_task("ext_payment_data"),
     ] >>
     get_task("consolidate") >>
     get_task("transform")
