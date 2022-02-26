@@ -3,7 +3,7 @@ from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.utils.dates import days_ago
 
-DIR = "/tmp/project/airflow/dags/finalassignment/staging/dir3/mll/"
+DIR = "/tmp/project/airflow/dags/finalassignment/staging/"
 ENV_VAR = {
     "DIR": DIR,
     "TOLL_DATA_URL": "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DB0250EN-SkillsNetwork/labs/Final%20Assignment/tolldata.tgz",
@@ -58,6 +58,9 @@ TASKS_CONFIG = {
     "unzip": "tar zxvf $TOLL_DATA -C $DIR",
     "ext_csv": "cut -d',' -f1-4 $VEHICLE_DATA > $CSV_DATA",
     "ext_fixed_with": "cut -c 59-67 $PAYMENT_DATA | tr ' ' ',' > $FIXED_WITH_DATA",
+    "ext_tsv": "cut -d$'\t' -f5-7 $TOLLPLAZA_DATA | tr $'\t' ',' | tr -d $'\r' > $TSV_DATA",
+    "consolidate": "paste -d ',' $CSV_DATA $TSV_DATA $FIXED_WITH_DATA > $EXTRACTED_DATA",
+    "transform": "tr '[:lower:]' '[:upper:]' < $EXTRACTED_DATA > $TRANSFORMED_DATA",
 }
 
 # pipeline
@@ -67,7 +70,8 @@ TASKS_CONFIG = {
     get_task("unzip")  >> [
         get_task("ext_csv"), 
         get_task("ext_fixed_with"),
-    ]
-    # consolidate_data >>
-    # transform_data
+        get_task("ext_tsv"),
+    ] >>
+    get_task("consolidate") >>
+    get_task("transform")
 )
