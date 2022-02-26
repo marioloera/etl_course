@@ -45,3 +45,6 @@ install-dev: install
 conf:
 	sed -i=.bak 's/load_examples = True/load_examples = False/g' $(AIRFLOW_HOME)/airflow.cfg
 	sed -i=.bak "s/# AUTH_ROLE_PUBLIC = 'Public'/AUTH_ROLE_PUBLIC = 'Admin'/g" $(AIRFLOW_HOME)/webserver_config.py
+
+ex:
+	sed -i=.bak 's/load_examples = False/load_examples = True/g' $(AIRFLOW_HOME)/airflow.cfg
