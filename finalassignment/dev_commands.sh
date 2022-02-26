@@ -15,10 +15,9 @@
 
 
 # 1.5
-#SRC="/tmp/project/airflow/dags/finalassignment/staging/tollplaza-data.tsv"
-#TARGET="/tmp/project/airflow/dags/finalassignment/staging/tsv_data.csv"
-#tr $'\t' ',' < $SRC | cut -d',' -f5-7 > $TARGET
-
+SRC="/tmp/project/airflow/dags/finalassignment/staging/tollplaza-data.tsv"
+TSV_DATA="/tmp/project/airflow/dags/finalassignment/staging/tsv_data.csv"
+tr $'\t' ',' < $SRC | cut -d',' -f5-7 | tr -d '\r' > $TSV_DATA
 
 # Task 1.6 - Create a task to extract data from fixed width file
 # SRC="/tmp/project/airflow/dags/finalassignment/staging/payment-data.txt"
@@ -32,7 +31,7 @@ TSV_DATA="/tmp/project/airflow/dags/finalassignment/staging/tsv_data.csv"
 FIXED_WITH_DATA="/tmp/project/airflow/dags/finalassignment/staging/fixed_width_data.csv"
 EXTRACTED_DATA="/tmp/project/airflow/dags/finalassignment/staging/extracted_data.csv"
 paste -d ',' $CSV_DATA $TSV_DATA $FIXED_WITH_DATA  > $EXTRACTED_DATA
-
+HEAD  $EXTRACTED_DATA
 
 # head $CSV_DATA > "./out/CSV_DATA.csv"
 # head $TSV_DATA > "./out/TSV_DATA.csv"
