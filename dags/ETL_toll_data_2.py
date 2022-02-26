@@ -65,7 +65,7 @@ TASKS_CONFIG = {
 
 # pipeline
 (
-    get_task("mkdir", False) >>
+    get_task("mkdir", with_dir=False) >>
     get_task("wget") >>
     get_task("unzip")  >> [
         get_task("ext_csv"), 
