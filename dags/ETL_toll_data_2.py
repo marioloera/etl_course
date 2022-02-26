@@ -80,8 +80,9 @@ TASKS_CONFIG = {
 (
     get_task("mkdir", with_dir=False) >>
     get_task("wget") >>
+    get_sensor("TOLL_DATA") >>
     get_task("unzip")  >> [
-        get_sensor("VEHICLE_DATA"),
+        # (get_sensor("VEHICLE_DATA") >> get_task("ext_vehicle_data"))  # did not work
         get_task("ext_vehicle_data"),
         get_task("ext_tollplaza_data"),
         get_task("ext_payment_data"),
