@@ -57,8 +57,8 @@ def get_sensor(file_id):
     return FileSensor(
         task_id=f"exist_{file_id}",
         poke_interval=5,
-        timeout=16, # fails if it doesnt
-        mode="reschedule",
+        timeout=0, # fails if it doesnt exist
+        # mode="reschedule",
         # on_failure_callback=_failure_callback,
         filepath=f"{DIR}{ENV_VAR[file_id]}",
         #fs_conn_id=f'conn_filesensor_{partner}'
