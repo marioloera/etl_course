@@ -82,7 +82,7 @@ TASKS_CONFIG = {
 #     get_task("mkdir", with_dir=False) >>
 #     get_task("wget") >>
 #     get_sensor("TOLL_DATA") >>
-#     get_task("unzip")  >> [
+#     get_task("unzip") >> [
 #         # (get_sensor("VEHICLE_DATA") >> get_task("ext_vehicle_data"))  # did not work
 #         # chain(get_sensor("VEHICLE_DATA"), get_task("ext_vehicle_data")), # did not work
 #         get_task("ext_tollplaza_data"),
@@ -93,7 +93,7 @@ TASKS_CONFIG = {
 # )
 
 # https://airflow.apache.org/docs/apache-airflow/stable/concepts/dags.html
-# Chain can also do pairwise dependencies for lists the same size 
+# Chain can also do pairwise dependencies for lists the same size
 chain(
     get_task("mkdir", with_dir=False),
     get_task("wget"),
@@ -110,3 +110,35 @@ chain(
     get_task("consolidate"),
     get_task("transform")
 )
+
+"""
+    but if list is not the same saice ??
+    a >> b1 >> b2 >> d
+    a >> c1 >> d         
+
+    this did not work
+    chain(
+        get_task("unzip") >> 
+            (get_sensor("PAYMENT_DATA") >> get_task("ext_payment_data")),
+            (get_sensor("TOLLPLAZA_DATA") >> get_task("ext_tollplaza_data")),     
+        get_task("consolidate"),
+    )
+"""
+"""
+# another option here but not so clean
+unzip = get_task("unzip")
+consolidate = get_task("consolidate")
+# pipeline
+(
+    get_task("mkdir", with_dir=False) >>
+    get_task("wget") >>
+    get_sensor("TOLL_DATA") >>
+    unzip
+)
+unzip >> get_sensor("TOLLPLAZA_DATA") >> get_task("ext_tollplaza_data") >> consolidate
+unzip >> get_sensor("VEHICLE_DATA") >> get_task("ext_vehicle_data") >> consolidate
+unzip >> get_sensor("PAYMENT_DATA") >> get_task("ext_payment_data") >> consolidate
+
+consolidate >> get_task("transform")
+"""
+
