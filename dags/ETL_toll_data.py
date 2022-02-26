@@ -7,15 +7,15 @@ DIR = "/tmp/project/airflow/dags/finalassignment/staging/"
 ENV_VAR = {
     "DIR": DIR,
     "TOLL_DATA_URL": "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DB0250EN-SkillsNetwork/labs/Final%20Assignment/tolldata.tgz",
-    "TOLL_DATA": DIR + "tolldata.tgz",
-    "VEHICLE_DATA": DIR + "vehicle-data.csv",
-    "CSV_DATA": DIR + "csv_data.csv",
-    "TOLLPLAZA_DATA": DIR + "tollplaza-data.tsv",
-    "TSV_DATA": DIR + "tsv_data.csv",
-    "PAYMENT_DATA": DIR + "payment-data.txt",
-    "FIXED_WITH_DATA": DIR + "fixed_width_data.csv",
-    "EXTRACTED_DATA": DIR + "extracted_data.csv",
-    "TRANSFORMED_DATA": DIR + "transformed_data.csv"
+    "TOLL_DATA": "tolldata.tgz",
+    "VEHICLE_DATA": "vehicle-data.csv",
+    "CSV_DATA": "csv_data.csv",
+    "TOLLPLAZA_DATA": "tollplaza-data.tsv",
+    "TSV_DATA": "tsv_data.csv",
+    "PAYMENT_DATA": "payment-data.txt",
+    "FIXED_WITH_DATA": "fixed_width_data.csv",
+    "EXTRACTED_DATA": "extracted_data.csv",
+    "TRANSFORMED_DATA": "transformed_data.csv"
 }
 
 # Task 1.1 - Define DAG arguments
@@ -54,6 +54,7 @@ download_data = BashOperator(
     task_id="download_data",
     bash_command=CMD,
     env=ENV_VAR,
+    cwd=DIR,
     dag=dag,
 )
 # airflow tasks test ETL_toll_data download_data 20220224
@@ -61,10 +62,14 @@ download_data = BashOperator(
 
 # Task 1.3 - Create a task to unzip data
 CMD = "tar zxvf $TOLL_DATA -C $DIR"
+""" 
+    -C $DIR is redundant if we dont want to sent to a different location
+"""
 unzip_data = BashOperator(
     task_id="unzip_data",
     bash_command=CMD,
     env=ENV_VAR,
+    cwd=DIR,
     dag=dag,
 )
 
@@ -77,17 +82,19 @@ extract_data_from_csv = BashOperator(
     task_id="extract_data_from_csv",
     bash_command=CMD,
     env=ENV_VAR,
+    cwd=DIR,
     dag=dag,
 )
 
 # airflow tasks test ETL_toll_data extract_data_from_csv 20220224
 
 # Task 1.5 - Create a task to extract data from tsv file
-CMD = "tr $'\t' ',' < $TOLLPLAZA_DATA | cut -d',' -f5-7 > $TSV_DATA"
+CMD = "cut -d$'\t' -f5-7 $TOLLPLAZA_DATA | tr $'\t' ',' | tr -d $'\r' > $TSV_DATA"
 extract_data_from_tsv = BashOperator(
     task_id="extract_data_from_tsv",
     bash_command=CMD,
     env=ENV_VAR,
+    cwd=DIR,
     dag=dag,
 )
 
@@ -99,17 +106,19 @@ extract_data_from_fixed_width = BashOperator(
     task_id="extract_data_from_fixed_width",
     bash_command=CMD,
     env=ENV_VAR,
+    cwd=DIR,
     dag=dag,
 )
 
 # airflow tasks test ETL_toll_data extract_data_from_fixed_width 20220224
 
 # Task 1.7 - Create a task to consolidate data extracted from previous tasks
-CMD = "paste -d ',' $CSV_DATA $TSV_DATA $FIXED_WITH_DATA  > $EXTRACTED_DATA"
+CMD = "paste -d ',' $CSV_DATA $TSV_DATA $FIXED_WITH_DATA > $EXTRACTED_DATA"
 consolidate_data = BashOperator(
     task_id="consolidate_data",
     bash_command=CMD,
     env=ENV_VAR,
+    cwd=DIR,
     dag=dag,
 )
 
@@ -121,6 +130,7 @@ transform_data = BashOperator(
     task_id="transform_data",
     bash_command=CMD,
     env=ENV_VAR,
+    cwd=DIR,
     dag=dag,
 )
 
