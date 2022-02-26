@@ -3,6 +3,17 @@ from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.utils.dates import days_ago
 
+DIR = "/tmp/project/airflow/dags/finalassignment/staging/"
+
+ENV_VAR = {
+    "DIR": DIR,
+    "TOLL_DATA_URL": "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DB0250EN-SkillsNetwork/labs/Final%20Assignment/tolldata.tgz",
+    "TOLL_DATA": DIR + "tolldata.tgz",
+    "VEHICLE-DATA": DIR + "vehicle-data.csv",
+    "CSV_DATA": DIR + "csv_data.csv",
+
+}
+print(ENV_VAR["TOLL_DATA"])
 
 # Task 1.1 - Define DAG arguments
 default_args = {
@@ -22,6 +33,28 @@ dag = DAG(
     default_args=default_args,
     description="Apache Airflow Final Assignment",
 )
+
+# Extra make dir
+CMD = f"mkdir -p $DIR"
+make_dir = BashOperator(
+    task_id="make_dir",
+    bash_command=CMD,
+    env=ENV_VAR,
+    dag=dag,
+)
+# airflow tasks test ETL_toll_data make_dir 20220224
+
+# Download
+# wget $TOLL_DATA_URL -O $TOLL_DATA
+CMD = "wget $TOLL_DATA_URL -O $TOLL_DATA"
+download_data = BashOperator(
+    task_id="download_data",
+    bash_command=CMD,
+    env=ENV_VAR,
+    dag=dag,
+)
+# airflow tasks test ETL_toll_data download_data 20220224
+
 
 # Task 1.3 - Create a task to unzip data
 SRC = "/tmp/project/airflow/dags/finalassignment/tolldata.tgz"
