@@ -14,7 +14,7 @@ wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DB02
 
 
 ```
-python3 -m pip install kafka
+python3 -m pip install kafka-python
 ```
 
 ```
