@@ -95,6 +95,7 @@ TASKS_CONFIG = {
 
 # https://airflow.apache.org/docs/apache-airflow/stable/concepts/dags.html
 # Chain can also do pairwise dependencies for lists the same size
+# dag ETL_toll_data_2_dag.png
 chain(
     get_task("mkdir", with_dir=False),
     get_task("wget"),
@@ -144,8 +145,9 @@ consolidate >> get_task("transform")
 """
 
 """
-# another option here but not exactly the desire dag
+# another option here but not exactly the desire dag, with extra step
 # pipeline
+# dag ETL_toll_data_2_dag_extra_step.png
 (
     get_task("mkdir", with_dir=False) >>
     get_task("wget") >>
@@ -155,7 +157,7 @@ consolidate >> get_task("transform")
         get_sensor("PAYMENT_DATA"),
         get_sensor("TOLLPLAZA_DATA"),
     ] >>
-    DummyOperator(task_id="join", dag=dag) >> [
+    DummyOperator(task_id="unzip_done", dag=dag) >> [
         get_task("ext_vehicle_data"),
         get_task("ext_payment_data"),
         get_task("ext_tollplaza_data"),
