@@ -3,8 +3,8 @@ Top Traffic Simulator
 """
 from time import sleep, time, ctime
 from random import random, randint, choice
-from kafka import KafkaProducer
-producer = KafkaProducer(bootstrap_servers='localhost:9092')
+# from kafka import KafkaProducer
+# producer = KafkaProducer(bootstrap_servers='localhost:9092')
 
 TOPIC = 'toll'
 
@@ -19,5 +19,5 @@ for _ in range(100000):
     message = f"{now},{vehicle_id},{vehicle_type},{plaza_id}"
     message = bytearray(message.encode("utf-8"))
     print(f"A {vehicle_type} has passed by the toll plaza {plaza_id} at {now}.")
-    producer.send(TOPIC, message)
+    # producer.send(TOPIC, message)
     sleep(random() * 2)
